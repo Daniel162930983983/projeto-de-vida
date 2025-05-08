@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Projeto de Vida - Perguntas e Respostas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            background-color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .menu {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0 20px;
+        }
+        
+        .menu li {
+            padding: 15px 20px;
+        }
+        
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .menu a:hover {
+            color: #3498db;
+        }
+        
+        .content {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+            scroll-margin-top: 80px;
+        }
+        
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        .qa-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3498db;
+            cursor: pointer;
+            position: relative;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .question::after {
+            content: "+";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .question.active::after {
+            content: "-";
+        }
+        
+        .answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+        
+        .answer p {
+            padding: 20px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .answer.show {
+            padding: 0;
+            max-height: 500px;
+        }
+        
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        footer p {
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .menu {
+                padding: 0 10px;
+            }
+            
+            .menu li {
+                padding: 15px 10px;
+            }
+            
+            .question, .answer p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Mobile menu toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .mobile-toggle {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+            
+            .menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .menu.show {
+                display: flex;
+            }
+            
+            .menu li {
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Meu Projeto de Vida</h1>
+            <p>Uma jornada pelo autoconhecimento, valores e aspirações profissionais</p>
+        </header>
+        
+        <nav>
+            <button class="mobile-toggle">☰ Menu</button>
+            <ul class="menu">
+                <li><a href="#projeto">Projeto de Vida</a></li>
+                <li><a href="#pessoal">Dimensão Pessoal</a></li>
+                <li><a href="#social">Dimensão Social</a></li>
+                <li><a href="#valores">Valores e Sonhos</a></li>
+                <li><a href="#profissional">Dimensão Profissional</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content">
+            <!-- Seção 1: Projeto de Vida -->
+            <div id="projeto" class="section">
+                <h2>Projeto de Vida</h2>
+                
+                <div class="qa-container">
+                    <div class="question">1. Qual é o seu projeto de vida?</div>
+                    <div class="answer">
+                        <p>Meu projeto de vida é crescer pessoal e profissionalmente nas áreas de psicologia e marketing, usando minha comunicação e empatia para ajudar pessoas a se entenderem melhor e também a se conectarem com ideias, marcas e propósitos.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">2. Quais dimensões da vida o seu planejamento abrange?</div>
+                    <div class="answer">
+                        <p>Ele abrange as dimensões pessoal, social e profissional. Pessoal porque busco equilíbrio emocional e autoconhecimento; social porque valorizo relações saudáveis e empáticas; profissional porque quero ter impacto no mundo unindo psicologia, vendas e comportamento humano.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">3. Quais são os seus interesses e valores mais importantes?</div>
+                    <div class="answer">
+                        <p>Tenho grande interesse por comportamento humano, comunicação, estratégias de influência positiva e crescimento pessoal. Meus valores mais fortes são a empatia, autenticidade, ética e evolução contínua.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">4. Quais são os seus sonhos e motivações?</div>
+                    <div class="answer">
+                        <p>Sonho em ser um profissional reconhecido por transformar realidades, seja por meio da escuta terapêutica ou da comunicação estratégica. Sou motivado pela possibilidade de ver resultados reais nas pessoas e negócios que ajudo.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção 2: Dimensão Pessoal -->
+            <div id="pessoal" class="section">
+                <h2>Dimensão Pessoal</h2>
+                
+                <div class="qa-container">
+                    <div class="question">5. Como identificar suas emoções e sentimentos? Como lidar com eles? De que forma você se vê?</div>
+                    <div class="answer">
+                        <p>Hoje reconheço minhas emoções prestando atenção no meu corpo, nas reações que tenho e refletindo sobre o que estou sentindo. Tento lidar com elas com consciência, usando o que aprendi na psicologia. Me vejo como alguém em constante construção, aprendendo com cada experiência.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">6. Quais são suas metas pessoais? Você já está colocando elas em prática?</div>
+                    <div class="answer">
+                        <p>Minhas metas incluem concluir minha formação, fazer especializações, desenvolver projetos de impacto e criar uma marca pessoal. Já estou dando passos: estudando, criando conteúdo e buscando experiência.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">7. Quais escolhas pessoais você já fez? Elas têm a ver com suas características pessoais?</div>
+                    <div class="answer">
+                        <p>Escolhi seguir áreas que envolvem gente, comunicação e comportamento, pois sempre fui observador, curioso e comunicativo. Gosto de ouvir, entender e me conectar com o outro.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">20. O que mudou em você desde a 1ª série? Como você se vê? De que maneira se sente?</div>
+                    <div class="answer">
+                        <p>Hoje sou mais consciente de quem sou e do que quero. Entendi que não preciso me encaixar, e sim me expressar. Me sinto mais preparado, mesmo com inseguranças naturais.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">21. Quais habilidades você precisa desenvolver?</div>
+                    <div class="answer">
+                        <p>Preciso aprimorar gestão de tempo, networking e habilidades técnicas em ferramentas de marketing e atendimento psicológico.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">19. O que me faz feliz e realizado(a)?</div>
+                    <div class="answer">
+                        <p>Ajudar alguém a se entender melhor, ver um projeto dar certo, aprender algo novo, sentir que fiz diferença.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção 3: Dimensão Social -->
+            <div id="social" class="section">
+                <h2>Dimensão Social</h2>
+                
+                <div class="qa-container">
+                    <div class="question">8. Qual é o seu papel no mundo? Como você é visto na família, escola e entre amigos?</div>
+                    <div class="answer">
+                        <p>Acredito que meu papel é ser alguém que conecta, transforma e inspira. Na família e entre amigos, sou visto como conselheiro, alguém de confiança. Na escola, como alguém criativo e comunicativo.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">9. De que maneira percebe os outros?</div>
+                    <div class="answer">
+                        <p>Procuro sempre ver além do óbvio. Acredito que todos têm histórias e que o comportamento é reflexo de vivências. Tento enxergar com empatia, sem julgamentos.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">10. De que forma você escolhe agir nas diversas situações sociais que participa?</div>
+                    <div class="answer">
+                        <p>Com respeito, escuta e intenção de somar. Em grupos, gosto de liderar quando necessário, mas também de ouvir e aprender.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">11. Como pode estabelecer relações mais construtivas e saudáveis?</div>
+                    <div class="answer">
+                        <p>Sendo transparente, cultivando a escuta ativa, respeitando limites e sabendo dar e receber feedback.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">12. Quais são seus direitos e deveres em sociedade?</div>
+                    <div class="answer">
+                        <p>Tenho o direito de ser respeitado e o dever de respeitar o outro. De contribuir para um ambiente mais justo e saudável, tanto pessoal quanto profissionalmente.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">13. Você sabe fazer escolhas e tomar decisões conscientes e responsáveis? Justifique.</div>
+                    <div class="answer">
+                        <p>Sim. Tento sempre pensar no impacto das minhas escolhas, considerando meus valores e os efeitos para mim e para os outros.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">18. Que tipo de sociedade quero ajudar a construir?</div>
+                    <div class="answer">
+                        <p>Quero contribuir para uma sociedade mais consciente, acolhedora e ética, onde saúde mental e comunicação responsável sejam prioridades.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção 4: Valores e Sonhos -->
+            <div id="valores" class="section">
+                <h2>Valores e Sonhos</h2>
+                
+                <div class="qa-container">
+                    <div class="question">22. Quais são seus principais interesses, sonhos e valores?</div>
+                    <div class="answer">
+                        <p>Interesse por comportamento humano, vendas conscientes e comunicação. Sonho em crescer, ensinar e criar algo meu. Valorizo ética, liberdade e impacto positivo.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">23. Que estilo de vida deseja ter no futuro?</div>
+                    <div class="answer">
+                        <p>Equilibrado, com independência financeira, tempo para mim e para os outros, trabalhando com propósito e flexibilidade.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">24. Deixe uma mensagem para as gerações futuras:</div>
+                    <div class="answer">
+                        <p class="highlight" style="font-size: 1.2rem; text-align: center; font-style: italic;">
+                            "Acredite em você, estude sobre pessoas, comunique com respeito e nunca pare de aprender. O mundo precisa de mais empatia do que opinião."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção 5: Dimensão Profissional -->
+            <div id="profissional" class="section">
+                <h2>Dimensão Profissional</h2>
+                
+                <div class="qa-container">
+                    <div class="question">14. Quais são suas aptidões e habilidades necessárias ao mundo do trabalho atual?</div>
+                    <div class="answer">
+                        <p>Tenho boa comunicação, criatividade, empatia, inteligência emocional e visão estratégica. São todas habilidades muito valorizadas tanto na psicologia quanto no marketing.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">15. Que profissão deseja seguir e por quê?</div>
+                    <div class="answer">
+                        <p>Quero atuar como psicólogo com foco em comportamento e comunicação, e também em consultoria de marketing e vendas, ajudando marcas a se conectarem com pessoas de forma ética e humana.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">16. Como se imagina atuando nessa área?</div>
+                    <div class="answer">
+                        <p>Me vejo atendendo pessoas, liderando projetos, criando campanhas, dando palestras e gerando conteúdo que ensina e transforma.</p>
+                    </div>
+                </div>
+                
+                <div class="qa-container">
+                    <div class="question">17. Quais vantagens e desafios percebe nesse campo?</div>
+                    <div class="answer">
+                        <p>A vantagem é poder trabalhar com o que amo e fazer diferença. O desafio é a constante necessidade de atualização e lidar com um mercado competitivo e, às vezes, imediatista.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="#" class="back-to-top">↑</a>
+        
+        <footer>
+            <p>Meu Projeto de Vida - 2025</p>
+            <p>Uma jornada de autoconhecimento e planejamento profissional</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Accordion functionality
+            const questions = document.querySelectorAll('.question');
+            
+            questions.forEach(question => {
+                question.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const answer = this.nextElementSibling;
+                    answer.classList.toggle('show');
+                });
+            });
+            
+            // Back to top button
+            const backToTop = document.querySelector('.back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const menu = document.querySelector('.menu');
+            
+            mobileToggle.addEventListener('click', function() {
+                menu.classList.toggle('show');
+            });
+            
+            // Close menu when clicking on a link
+            const menuLinks = document.querySelectorAll('.menu a');
+            
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    menu.classList.remove('show');
+                    
+                    // Smooth scroll to section
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Open first question in each section by default
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const firstQuestion = section.querySelector('.question');
+                const firstAnswer = section.querySelector('.answer');
+                
+                if (firstQuestion && firstAnswer) {
+                    firstQuestion.classList.add('active');
+                    firstAnswer.classList.add('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
